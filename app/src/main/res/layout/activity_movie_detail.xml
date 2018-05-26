@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_movie_title"
+        android:textSize="40sp"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="#009688"
+        android:textColor="#FFFFFF"
+        android:text="tvgtgtvtcvtxcrnjnjnjnn"/>
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="4">
+
+        <ImageView
+            android:id="@+id/iv_movie_cover"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/sample_7"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+        <TextView
+            android:id="@+id/tv_movie_release_year"
+            android:textSize="30sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2015" />
+
+        <TextView
+            android:id="@+id/tv_movie_duration"
+            android:textSize="25sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="120min" />
+
+        <TextView
+            android:id="@+id/tv_movie_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="8.1/10" />
+
+        <Button
+            android:id="@+id/btn_movie_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#86e4db"
+            android:text="Mark as\n favorite" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_movie_overview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000000"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Trailers" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_movie_trailer"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/sample_4" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trailer Name"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_movie_trailer"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000"
+            android:layout_marginTop="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_movie_trailer">
+        </FrameLayout>
+</LinearLayout>
+</ScrollView>

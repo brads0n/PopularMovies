@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Pop Movies</string>
+    <string name="activity2_label">MovieDetail</string>
+</resources>
