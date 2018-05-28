@@ -1,111 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent">
-
-<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/tv_movie_title"
-        android:textSize="40sp"
-        android:gravity="center_vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="#009688"
-        android:textColor="#FFFFFF" />
-
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="4">
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/iv_movie_cover"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tv_movie_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp"
-            />
+            android:background="#009688"
+            android:gravity="center_vertical"
+            android:textColor="#FFFFFF"
+            android:textSize="40sp" />
+
+
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1">
-        <TextView
-            android:id="@+id/tv_movie_release_year"
-            android:textSize="30sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_movie_duration"
-            android:textSize="25sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/iv_movie_cover"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:paddingBottom="8dp"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:paddingTop="8dp"
+                android:scaleType="fitCenter" />
 
-        <TextView
-            android:id="@+id/tv_movie_rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_movie_favorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#86e4db"
-            android:text="@string/btn_favorite" />
+                <TextView
+                    android:id="@+id/tv_movie_release_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp" />
 
+                <TextView
+                    android:id="@+id/tv_movie_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/tv_movie_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/btn_movie_favorite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#86e4db"
+                    android:text="@string/btn_favorite" />
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/tv_movie_overview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000000"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tv_trailers" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/iv_movie_trailer"
-            android:layout_width="45dp"
-            android:layout_height="45dp"/>
 
         <TextView
+            android:id="@+id/tv_movie_overview"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_movie_trailer"
-            app:layout_constraintTop_toTopOf="parent" />
-    </LinearLayout>
+            android:layout_height="wrap_content" />
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#000000"
-            android:layout_marginTop="5dp">
-        </FrameLayout>
-</LinearLayout>
+            android:background="#000000" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_trailers" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:src="@drawable/play" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_movie_trailer"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:background="#000000"></FrameLayout>
+    </LinearLayout>
 </ScrollView>
