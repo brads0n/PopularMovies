@@ -12,7 +12,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.android.popularmovies.adapter.ImageAdapter;
-import com.example.android.popularmovies.beans.Movie;
+import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.services.PopularMoviesService;
 
 import java.util.ArrayList;

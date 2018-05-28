@@ -1,4 +1,4 @@
-package com.example.android.popularmovies.beans;
+package com.example.android.popularmovies.model;
 
 import java.io.Serializable;
 import java.net.URL;

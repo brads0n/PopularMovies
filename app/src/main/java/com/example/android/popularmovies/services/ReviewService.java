@@ -6,7 +6,8 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 
 import com.example.android.popularmovies.NetworkUtils;
-import com.example.android.popularmovies.model.Trailer;
+import com.example.android.popularmovies.model.Movie;
+import com.example.android.popularmovies.model.Review;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,36 +19,33 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrailerService extends IntentService {
+public class ReviewService extends IntentService {
 
-    public static final String ACTION = "com.example.android.popularmovies.services.TrailerService";
+    public static final String ACTION = "com.example.android.popularmovies.services.ReviewService";
 
-    public TrailerService() {
+    public ReviewService() {
         super(ACTION);
     }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
 
-        List<Trailer> trailers = new ArrayList<>();
-        String id = intent.getStringExtra("urlString");
+        List<Review> reviews = new ArrayList<>();
+        int movieId = intent.getIntExtra("id", 0);
         URL url;
-        url = NetworkUtils.buildTMDBUrl("/movie/" + id + "/videos");
+        url = NetworkUtils.buildTMDBUrl("/movie/" + movieId + "/reviews");
         String json = null;
         try {
             json = NetworkUtils.getJson(url);
-
             JSONObject my_obj = new JSONObject(json);
             JSONArray jsonArray = my_obj.getJSONArray("results");
 
             for (int i = 0; i < jsonArray.length(); i++) {
-                Trailer trailer = fetchTrailer(jsonArray.getJSONObject(i));
-
-                trailers.add(trailer);
-
+                Review review = fetchMovie(jsonArray.getJSONObject(i));
+                reviews.add(review);
             }
 
-            sendBroadcast(trailers);
+            sendBroadcast(reviews);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -57,20 +55,20 @@ public class TrailerService extends IntentService {
 
     }
 
-    private Trailer fetchTrailer(JSONObject trailerJason) throws JSONException {
-        Trailer trailer = new Trailer();
-        trailer.setId(trailerJason.getString("id"));
-        trailer.setTitle(trailerJason.getString("name"));
-        String urlString = trailerJason.getString("key");
-        trailer.setUrl(NetworkUtils.buildYOUTBUrl(urlString));
+    private Review fetchMovie(JSONObject reviewJason) throws JSONException {
+        Review review = new Review();
 
-        return trailer;
+        review.setId(reviewJason.getString("id"));
+        review.setAuthor(reviewJason.getString("author"));
+        review.setContent(reviewJason.getString("content"));
+
+        return review;
     }
 
-    private void sendBroadcast(List<Trailer> trailers) {
+    private void sendBroadcast(List<Review> reviews) {
         Intent resultIntent = new Intent(ACTION);
         resultIntent.putExtra("resultCode", Activity.RESULT_OK);
-        resultIntent.putExtra("trailers", (Serializable) trailers);
+        resultIntent.putExtra("reviews", (Serializable) reviews);
         sendBroadcast(resultIntent);
     }
 }

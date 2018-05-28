@@ -4,10 +4,9 @@ import android.app.Activity;
 import android.app.IntentService;
 import android.content.Intent;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.example.android.popularmovies.NetworkUtils;
-import com.example.android.popularmovies.beans.Movie;
+import com.example.android.popularmovies.model.Movie;
 
 import org.json.JSONArray;
 import org.json.JSONException;

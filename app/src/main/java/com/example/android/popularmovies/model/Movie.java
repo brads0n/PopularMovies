@@ -1,7 +1,4 @@
-package com.example.android.popularmovies.beans;
-
-import android.os.Parcel;
-import android.os.Parcelable;
+package com.example.android.popularmovies.model;
 
 import java.io.Serializable;
 
@@ -13,6 +10,15 @@ public class Movie implements Serializable {
     private float rating;
     private int duration;
     private String poster;
+    private boolean favorite = false;
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
 
     public int getDuration() {
         return duration;
@@ -51,7 +57,7 @@ public class Movie implements Serializable {
     }
 
     public void setRelease_date(String release_date) {
-        this.release_date = release_date;
+        this.release_date = release_date.split("-")[0]; // Gert only the year
     }
 
     public float getRating() {

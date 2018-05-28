@@ -1,6 +1,5 @@
 package com.example.android.popularmovies.adapter;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -14,9 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.popularmovies.R;
-import com.example.android.popularmovies.beans.Trailer;
+import com.example.android.popularmovies.model.Trailer;
 
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 

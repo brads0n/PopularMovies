@@ -1,8 +1,6 @@
 package com.example.android.popularmovies;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,26 +11,28 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.popularmovies.adapter.ReviewAdapter;
 import com.example.android.popularmovies.adapter.TrailerAdapter;
-import com.example.android.popularmovies.beans.Movie;
-import com.example.android.popularmovies.beans.Trailer;
+import com.example.android.popularmovies.model.Movie;
+import com.example.android.popularmovies.model.Review;
+import com.example.android.popularmovies.model.Trailer;
 import com.example.android.popularmovies.services.MovieService;
-import com.example.android.popularmovies.services.PopularMoviesService;
+import com.example.android.popularmovies.services.ReviewService;
 import com.example.android.popularmovies.services.TrailerService;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MovieDetail extends AppCompatActivity {
 
     Movie movie;
     List<Trailer> trailers;
-    RecyclerView rv;
+    List<Review> reviews;
+    RecyclerView rvTrailers;
+    RecyclerView rvReviews;
 
     TextView tvMovieTitle;
     ImageView ivMovieCover;
@@ -57,6 +57,7 @@ public class MovieDetail extends AppCompatActivity {
         int id = intent.getIntExtra("id", 0);
         getMovie(id);
         getTrailers(id);
+        getReviews(id);
 
     }
 
@@ -84,6 +85,18 @@ public class MovieDetail extends AppCompatActivity {
         }
     };
 
+    BroadcastReceiver reviewsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int resultCode = intent.getIntExtra("resultCode", Activity.RESULT_CANCELED);
+
+            if(resultCode == RESULT_OK) {
+                reviews = (List<Review>) intent.getSerializableExtra("reviews");
+                populateReviews();
+            }
+        }
+    };
+
     public void populateMovie() {
         tvMovieTitle = findViewById(R.id.tv_movie_title);
         ivMovieCover = findViewById(R.id.iv_movie_cover);
@@ -103,15 +116,23 @@ public class MovieDetail extends AppCompatActivity {
     }
 
     public void populateTrailers() {
-        rv = findViewById(R.id.trailers);
+        rvTrailers = findViewById(R.id.trailers);
         LinearLayoutManager llm = new LinearLayoutManager(this);
-        rv.setLayoutManager(llm);
+        rvTrailers.setLayoutManager(llm);
         TrailerAdapter adapter = new TrailerAdapter(this, trailers);
-        rv.setAdapter(adapter);
+        rvTrailers.setAdapter(adapter);
+    }
 
+    public void populateReviews() {
+        rvReviews = findViewById(R.id.reviews);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        rvReviews.setLayoutManager(llm);
+        ReviewAdapter adapter = new ReviewAdapter(this, reviews);
+        rvReviews.setAdapter(adapter);
 
-        for (Trailer trailer :  trailers ) {
-            Log.e("Bradson", "Trailer: " + trailer.getTitle() + ": " + trailer.getUrl());
+        for (Review review: reviews
+             ) {
+            Log.e("Bradson", "Review: " + review.getAuthor() + " :" + review.getContent());
         }
     }
 
@@ -125,6 +146,11 @@ public class MovieDetail extends AppCompatActivity {
         intent.putExtra("urlString", String.valueOf(id));
         startService(intent);
     }
+    private void getReviews(int id) {
+        Intent intent = new Intent(this, ReviewService.class);
+        intent.putExtra("id", id);
+        startService(intent);
+    }
 
     @Override
     protected void onResume() {
@@ -133,6 +159,8 @@ public class MovieDetail extends AppCompatActivity {
         registerReceiver(movieReceiver, movieFilter);
         IntentFilter trailerFilter = new IntentFilter(TrailerService.ACTION);
         registerReceiver(trailersReceiver, trailerFilter);
+        IntentFilter reviewFilter = new IntentFilter(ReviewService.ACTION);
+        registerReceiver(reviewsReceiver, reviewFilter);
     }
 
     @Override
@@ -140,5 +168,6 @@ public class MovieDetail extends AppCompatActivity {
         super.onPause();
         unregisterReceiver(movieReceiver);
         unregisterReceiver(trailersReceiver);
+        unregisterReceiver(reviewsReceiver);
     }
 }

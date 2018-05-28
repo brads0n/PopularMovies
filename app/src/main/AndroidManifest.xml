@@ -15,6 +15,7 @@
         <service android:name=".services.PopularMoviesService" android:exported="false" />
         <service android:name=".services.MovieService" android:exported="false" />
         <service android:name=".services.TrailerService" android:exported="false" />
+        <service android:name=".services.ReviewService" android:exported="false" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -24,8 +25,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".MovieDetail"
-            android:label="@string/activity2_label">
-
+            android:label="@string/activity2_label"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
         </activity>
     </application>
 
