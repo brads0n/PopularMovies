@@ -1,17 +1,23 @@
 package com.example.android.popularmovies;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.popularmovies.adapter.TrailerAdapter;
 import com.example.android.popularmovies.beans.Movie;
 import com.example.android.popularmovies.beans.Trailer;
 import com.example.android.popularmovies.services.MovieService;
@@ -26,6 +32,7 @@ public class MovieDetail extends AppCompatActivity {
 
     Movie movie;
     List<Trailer> trailers;
+    RecyclerView rv;
 
     TextView tvMovieTitle;
     ImageView ivMovieCover;
@@ -96,6 +103,13 @@ public class MovieDetail extends AppCompatActivity {
     }
 
     public void populateTrailers() {
+        rv = findViewById(R.id.trailers);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        rv.setLayoutManager(llm);
+        TrailerAdapter adapter = new TrailerAdapter(this, trailers);
+        rv.setAdapter(adapter);
+
+
         for (Trailer trailer :  trailers ) {
             Log.e("Bradson", "Trailer: " + trailer.getTitle() + ": " + trailer.getUrl());
         }

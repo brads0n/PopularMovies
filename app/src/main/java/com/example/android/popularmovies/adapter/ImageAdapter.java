@@ -1,4 +1,4 @@
-package com.example.android.popularmovies;
+package com.example.android.popularmovies.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,7 +17,7 @@ import java.util.List;
 
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
-class ImageAdapter extends BaseAdapter {
+public class ImageAdapter extends BaseAdapter {
     private List<String> covers;
     private Context mContext;
 

@@ -38,7 +38,6 @@ public class MovieService extends IntentService {
         url = NetworkUtils.buildTMDBUrl("/movie/" + id);
         String json = null;
         try {
-            Log.e("Bradson", url.toString());
             json = NetworkUtils.getJson(url);
 
             JSONObject movieJason = new JSONObject(json);

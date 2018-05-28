@@ -3,4 +3,7 @@
     <string name="activity2_label">MovieDetail</string>
     <string name="btn_favorite">Mark as favorite</string>
     <string name="tv_trailers">Trailers</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
