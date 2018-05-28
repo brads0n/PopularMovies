@@ -13,7 +13,7 @@ import android.widget.GridView;
 
 import com.example.android.popularmovies.adapter.ImageAdapter;
 import com.example.android.popularmovies.model.Movie;
-import com.example.android.popularmovies.services.PopularMoviesService;
+import com.example.android.popularmovies.services.GetMoviesService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
         gridView = findViewById(R.id.gridView);
 
-        getMovies("/movie/popular");
+//        getMovies("/movie/popular");
+        getMovies("/movie/top_rated");
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getMovies(String query) {
-        Intent intent = new Intent(this, PopularMoviesService.class);
+        Intent intent = new Intent(this, GetMoviesService.class);
         intent.putExtra("urlString", query);
         startService(intent);
     }
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        IntentFilter filter = new IntentFilter(PopularMoviesService.ACTION);
+        IntentFilter filter = new IntentFilter(GetMoviesService.ACTION);
         registerReceiver(myReceiver, filter);
     }
 

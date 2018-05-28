@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -110,8 +111,8 @@ public class MovieDetail extends AppCompatActivity {
 
         tvMovieTitle.setText(movie.getTitle());
         tvMovieRelease.setText(movie.getRelease_date());
-        tvMovieDuration.setText("" + movie.getDuration());
-        tvMovieRating.setText("" + movie.getRating());
+        tvMovieDuration.setText(movie.getDuration() + "min");
+        tvMovieRating.setText(movie.getRating() + "/10");
         tvMovieOverview.setText(movie.getOverview());
     }
 
@@ -169,5 +170,9 @@ public class MovieDetail extends AppCompatActivity {
         unregisterReceiver(movieReceiver);
         unregisterReceiver(trailersReceiver);
         unregisterReceiver(reviewsReceiver);
+    }
+
+    public void addToFavorites(View v) {
+        movie.setFavorite(!movie.isFavorite());
     }
 }

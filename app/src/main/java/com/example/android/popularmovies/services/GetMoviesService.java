@@ -18,11 +18,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PopularMoviesService extends IntentService {
+public class GetMoviesService extends IntentService {
 
-    public static final String ACTION = "com.example.android.popularmovies.services.PopularMoviesService";
+    public static final String ACTION = "com.example.android.popularmovies.services.GetMoviesService";
 
-    public PopularMoviesService() {
+    public GetMoviesService() {
         super(ACTION);
     }
 
