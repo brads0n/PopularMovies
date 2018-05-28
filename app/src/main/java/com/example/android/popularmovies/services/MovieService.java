@@ -17,50 +17,41 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-public class PopularMoviesService extends IntentService {
+public class MovieService extends IntentService {
 
-    public static final String ACTION = "com.example.android.popularmovies.services.PopularMoviesService";
+    public static final String ACTION = "com.example.android.popularmovies.services.MovieService";
 
-    public PopularMoviesService() {
+    public MovieService() {
         super(ACTION);
     }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
 
-        List<Movie> movies = new ArrayList<>();
-        String urlString = intent.getStringExtra("urlString");
+        Movie movie = new Movie();
+        String id = intent.getStringExtra("urlString");
         URL url;
-        url = NetworkUtils.buildTMDBUrl(urlString);
+        // TODO Missing id
+        url = NetworkUtils.buildTMDBUrl("/movie/" + id);
         String json = null;
         try {
             Log.e("Bradson", url.toString());
             json = NetworkUtils.getJson(url);
-            JSONObject my_obj = new JSONObject(json);
-            JSONArray jsonArray = my_obj.getJSONArray("results");
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                Log.e("MovieDetail", jsonArray.getJSONObject(i).getString("title"));
-                Movie movie = fetchMovie(jsonArray.getJSONObject(i));
+            JSONObject movieJason = new JSONObject(json);
+            movie = fetchMovie(movieJason);
 
-                movies.add(movie);
+            sendBroadcast(movie);
 
-                sendBroadcast(movies);
-            }
         } catch (IOException e) {
             e.printStackTrace();
-        }  catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
-    }
-
-    private void getMovie(String id) {
-        Intent intent = new Intent(this, MovieService.class);
-        intent.putExtra("urlString", id);
-        startService(intent);
     }
 
     private Movie fetchMovie(JSONObject movieJason) throws JSONException {
@@ -70,15 +61,16 @@ public class PopularMoviesService extends IntentService {
         movie.setOverview(movieJason.getString("overview"));
         movie.setRelease_date(movieJason.getString("release_date"));
         movie.setRating(movieJason.getInt("vote_average"));
+        movie.setDuration(movieJason.getInt("runtime"));
         movie.setPoster(movieJason.getString("poster_path"));
 
         return movie;
     }
 
-    private void sendBroadcast(List<Movie> movies) {
+    private void sendBroadcast(Movie movie) {
         Intent resultIntent = new Intent(ACTION);
         resultIntent.putExtra("resultCode", Activity.RESULT_OK);
-        resultIntent.putExtra("movies", (Serializable) movies);
+        resultIntent.putExtra("movie", movie);
         sendBroadcast(resultIntent);
     }
 }

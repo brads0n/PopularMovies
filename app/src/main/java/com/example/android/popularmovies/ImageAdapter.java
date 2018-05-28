@@ -11,7 +11,6 @@ import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.example.android.popularmovies.beans.MyMovie;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -29,7 +28,7 @@ class ImageAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return sampleImages.length;
+        return covers.size();
     }
 
     @Override
@@ -51,19 +50,11 @@ class ImageAdapter extends BaseAdapter {
         } else {
             imageView = (ImageView) convertView;
         }
-        imageView.setImageResource(sampleImages[position]);
+//        imageView.setImageResource(sampleImages[position]);
         Picasso.get().load(
                 "https://image.tmdb.org/t/p/w300"
                         + covers.get(position)
         ).into(imageView);
         return imageView;
     }
-
-    private Integer[] sampleImages = {
-            R.drawable.sample_0, R.drawable.sample_1,
-            R.drawable.sample_2, R.drawable.sample_3,
-            R.drawable.sample_4, R.drawable.sample_5,
-            R.drawable.sample_6, R.drawable.sample_7,
-            R.drawable.sample_0, R.drawable.sample_1
-    };
 }

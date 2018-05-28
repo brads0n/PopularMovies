@@ -1,37 +1,27 @@
 package com.example.android.popularmovies;
 
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
+import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.android.popularmovies.beans.MyMovie;
-import com.example.android.popularmovies.services.MovieResultService;
+import com.example.android.popularmovies.beans.Movie;
+import com.example.android.popularmovies.services.MovieService;
 import com.example.android.popularmovies.services.PopularMoviesService;
-import com.example.android.popularmovies.services.ProccessService;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Scanner;
-
-import info.movito.themoviedbapi.TmdbApi;
-import info.movito.themoviedbapi.TmdbFind;
-import info.movito.themoviedbapi.TmdbMovies;
-import info.movito.themoviedbapi.model.FindResults;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MovieDetail extends AppCompatActivity {
+
+    Movie movie;
 
     TextView tvMovieTitle;
     ImageView ivMovieCover;
@@ -52,8 +42,25 @@ public class MovieDetail extends AppCompatActivity {
         if(intent.getExtras() == null) {
             finish();
         }
-        MyMovie movie = (MyMovie) intent.getSerializableExtra("movie");
 
+        int id = intent.getIntExtra("id", 0);
+        getMovie(id);
+
+    }
+
+    BroadcastReceiver myReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int resultCode = intent.getIntExtra("resultCode", Activity.RESULT_CANCELED);
+
+            if(resultCode == RESULT_OK) {
+                movie = (Movie) intent.getSerializableExtra("movie");
+                populateFields();
+            }
+        }
+    };
+
+    public void populateFields() {
         tvMovieTitle = findViewById(R.id.tv_movie_title);
         ivMovieCover = findViewById(R.id.iv_movie_cover);
         tvMovieRelease = findViewById(R.id.tv_movie_release_year);
@@ -69,5 +76,24 @@ public class MovieDetail extends AppCompatActivity {
         tvMovieDuration.setText("" + movie.getDuration());
         tvMovieRating.setText("" + movie.getRating());
         tvMovieOverview.setText(movie.getOverview());
+    }
+
+    private void getMovie(int id) {
+        Intent intent = new Intent(this, MovieService.class);
+        intent.putExtra("urlString", String.valueOf(id));
+        startService(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter(MovieService.ACTION);
+        registerReceiver(myReceiver, filter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(myReceiver);
     }
 }

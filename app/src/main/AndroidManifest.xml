@@ -13,8 +13,7 @@
         android:theme="@style/AppTheme">
 
         <service android:name=".services.PopularMoviesService" android:exported="false" />
-        <service android:name=".services.ProccessService" android:exported="false" />
-        <service android:name=".services.MovieResultService" android:exported="false" />
+        <service android:name=".services.MovieService" android:exported="false" />
 
         <activity android:name=".MainActivity">
             <intent-filter>

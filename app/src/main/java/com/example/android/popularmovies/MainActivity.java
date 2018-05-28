@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.example.android.popularmovies.beans.MyMovie;
+import com.example.android.popularmovies.beans.Movie;
 import com.example.android.popularmovies.services.PopularMoviesService;
 
 import java.util.ArrayList;
@@ -20,16 +20,16 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     GridView gridView;
-    List<MyMovie> popularMovies;
+    List<Movie> popularMovies;
 
     BroadcastReceiver myReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             int resultCode = intent.getIntExtra("resultCode", Activity.RESULT_CANCELED);
-            popularMovies = (List<MyMovie>) intent.getSerializableExtra("movies");
+            popularMovies = (List<Movie>) intent.getSerializableExtra("movies");
 
             List<String> popularMoviesCovers = new ArrayList<>();
-            for (MyMovie movie: popularMovies
+            for (Movie movie: popularMovies
                  ) {
                 popularMoviesCovers.add(movie.getPoster());
             }
@@ -44,14 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         gridView = findViewById(R.id.gridView);
 
-//        // Get List of popular movies
-//        URL url = NetworkUtils.buildUrl("/movie/popular", "");
-//        new ProccessTask().execute(url);
-//        // How the hell am I suppose to know the results????????????
-
-        Intent intent = new Intent(this, PopularMoviesService.class);
-        intent.putExtra("urlString", "/movie/popular");
-        startService(intent);
+        getMovies("/movie/popular");
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -59,12 +52,28 @@ public class MainActivity extends AppCompatActivity {
                                     int position, long id) {
                 Intent i = new Intent(getApplicationContext(), MovieDetail.class);
                 // TODO qet query based on possition
-                i.putExtra("movie", popularMovies.get(position));
+                i.putExtra("id", popularMovies.get(position).getId());
                 startActivity(i);
             }
         });
+    }
 
+    private void getMovies(String query) {
+        Intent intent = new Intent(this, PopularMoviesService.class);
+        intent.putExtra("urlString", query);
+        startService(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         IntentFilter filter = new IntentFilter(PopularMoviesService.ACTION);
         registerReceiver(myReceiver, filter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(myReceiver);
     }
 }

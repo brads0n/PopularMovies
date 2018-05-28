@@ -5,13 +5,14 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 
-public class MyMovie implements Serializable {
+public class Movie implements Serializable {
     private int id;
     private String title;
     private String overview;
     private String release_date;
     private float rating;
     private int duration;
+    private String poster;
 
     public int getDuration() {
         return duration;
@@ -69,5 +70,4 @@ public class MyMovie implements Serializable {
         this.poster = poster;
     }
 
-    private String poster;
 }
