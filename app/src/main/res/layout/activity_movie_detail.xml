@@ -18,8 +18,7 @@ android:layout_height="match_parent">
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="#009688"
-        android:textColor="#FFFFFF"
-        android:text="tvgtgtvtcvtxcrnjnjnjnn"/>
+        android:textColor="#FFFFFF" />
 
 
     <LinearLayout
@@ -35,7 +34,6 @@ android:layout_height="match_parent">
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/sample_7"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:paddingLeft="24dp"
@@ -50,28 +48,25 @@ android:layout_height="match_parent">
             android:id="@+id/tv_movie_release_year"
             android:textSize="30sp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2015" />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/tv_movie_duration"
             android:textSize="25sp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="120min" />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/tv_movie_rating"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="8.1/10" />
+            android:layout_height="wrap_content"/>
 
         <Button
             android:id="@+id/btn_movie_favorite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#86e4db"
-            android:text="Mark as\n favorite" />
+            android:text="@string/btn_favorite" />
 
         </LinearLayout>
     </LinearLayout>
@@ -79,8 +74,7 @@ android:layout_height="match_parent">
     <TextView
         android:id="@+id/tv_movie_overview"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description" />
+        android:layout_height="wrap_content" />
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -88,7 +82,7 @@ android:layout_height="match_parent">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Trailers" />
+        android:text="@string/tv_trailers" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -98,13 +92,11 @@ android:layout_height="match_parent">
         <ImageView
             android:id="@+id/iv_movie_trailer"
             android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:src="@drawable/sample_4" />
+            android:layout_height="45dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Trailer Name"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_movie_trailer"
             app:layout_constraintTop_toTopOf="parent" />
@@ -113,8 +105,7 @@ android:layout_height="match_parent">
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#000000"
-            android:layout_marginTop="5dp"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_movie_trailer">
+            android:layout_marginTop="5dp">
         </FrameLayout>
 </LinearLayout>
 </ScrollView>

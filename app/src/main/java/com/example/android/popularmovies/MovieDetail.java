@@ -7,13 +7,16 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.popularmovies.beans.Movie;
+import com.example.android.popularmovies.beans.Trailer;
 import com.example.android.popularmovies.services.MovieService;
 import com.example.android.popularmovies.services.PopularMoviesService;
+import com.example.android.popularmovies.services.TrailerService;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -22,6 +25,7 @@ import java.util.List;
 public class MovieDetail extends AppCompatActivity {
 
     Movie movie;
+    List<Trailer> trailers;
 
     TextView tvMovieTitle;
     ImageView ivMovieCover;
@@ -45,22 +49,35 @@ public class MovieDetail extends AppCompatActivity {
 
         int id = intent.getIntExtra("id", 0);
         getMovie(id);
+        getTrailers(id);
 
     }
 
-    BroadcastReceiver myReceiver = new BroadcastReceiver() {
+    BroadcastReceiver movieReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             int resultCode = intent.getIntExtra("resultCode", Activity.RESULT_CANCELED);
 
             if(resultCode == RESULT_OK) {
                 movie = (Movie) intent.getSerializableExtra("movie");
-                populateFields();
+                populateMovie();
             }
         }
     };
 
-    public void populateFields() {
+    BroadcastReceiver trailersReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int resultCode = intent.getIntExtra("resultCode", Activity.RESULT_CANCELED);
+
+            if(resultCode == RESULT_OK) {
+                trailers = (List<Trailer>) intent.getSerializableExtra("trailers");
+                populateTrailers();
+            }
+        }
+    };
+
+    public void populateMovie() {
         tvMovieTitle = findViewById(R.id.tv_movie_title);
         ivMovieCover = findViewById(R.id.iv_movie_cover);
         tvMovieRelease = findViewById(R.id.tv_movie_release_year);
@@ -78,8 +95,19 @@ public class MovieDetail extends AppCompatActivity {
         tvMovieOverview.setText(movie.getOverview());
     }
 
+    public void populateTrailers() {
+        for (Trailer trailer :  trailers ) {
+            Log.e("Bradson", "Trailer: " + trailer.getTitle() + ": " + trailer.getUrl());
+        }
+    }
+
     private void getMovie(int id) {
         Intent intent = new Intent(this, MovieService.class);
+        intent.putExtra("urlString", String.valueOf(id));
+        startService(intent);
+    }
+    private void getTrailers(int id) {
+        Intent intent = new Intent(this, TrailerService.class);
         intent.putExtra("urlString", String.valueOf(id));
         startService(intent);
     }
@@ -87,13 +115,16 @@ public class MovieDetail extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        IntentFilter filter = new IntentFilter(MovieService.ACTION);
-        registerReceiver(myReceiver, filter);
+        IntentFilter movieFilter = new IntentFilter(MovieService.ACTION);
+        registerReceiver(movieReceiver, movieFilter);
+        IntentFilter trailerFilter = new IntentFilter(TrailerService.ACTION);
+        registerReceiver(trailersReceiver, trailerFilter);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(myReceiver);
+        unregisterReceiver(movieReceiver);
+        unregisterReceiver(trailersReceiver);
     }
 }

@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Pop Movies</string>
     <string name="activity2_label">MovieDetail</string>
+    <string name="btn_favorite">Mark as favorite</string>
+    <string name="tv_trailers">Trailers</string>
 </resources>

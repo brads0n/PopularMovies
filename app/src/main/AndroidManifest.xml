@@ -14,6 +14,7 @@
 
         <service android:name=".services.PopularMoviesService" android:exported="false" />
         <service android:name=".services.MovieService" android:exported="false" />
+        <service android:name=".services.TrailerService" android:exported="false" />
 
         <activity android:name=".MainActivity">
             <intent-filter>

@@ -36,22 +36,21 @@ public class PopularMoviesService extends IntentService {
         url = NetworkUtils.buildTMDBUrl(urlString);
         String json = null;
         try {
-            Log.e("Bradson", url.toString());
             json = NetworkUtils.getJson(url);
             JSONObject my_obj = new JSONObject(json);
             JSONArray jsonArray = my_obj.getJSONArray("results");
 
             for (int i = 0; i < jsonArray.length(); i++) {
-                Log.e("MovieDetail", jsonArray.getJSONObject(i).getString("title"));
                 Movie movie = fetchMovie(jsonArray.getJSONObject(i));
 
                 movies.add(movie);
 
-                sendBroadcast(movies);
             }
+
+            sendBroadcast(movies);
         } catch (IOException e) {
             e.printStackTrace();
-        }  catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
