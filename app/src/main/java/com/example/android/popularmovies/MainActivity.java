@@ -19,6 +19,7 @@ import android.widget.GridView;
 
 import com.example.android.popularmovies.adapter.ImageAdapter;
 import com.example.android.popularmovies.model.Movie;
+import com.example.android.popularmovies.persistence.MovieDB;
 import com.example.android.popularmovies.services.GetMoviesService;
 
 import java.util.ArrayList;
@@ -37,12 +38,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             if(resultCode == RESULT_OK) {
                 movies = (List<Movie>) intent.getSerializableExtra("movies");
 
-                setApadtor(movies);
+                setApadtor();
             }
         }
     };
 
-    public void setApadtor(List<Movie> movies) {
+    public void setApadtor() {
         List<String> popularMoviesCovers = new ArrayList<>();
         for (Movie movie : movies
                 ) {
@@ -50,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
         gridView.setAdapter(new ImageAdapter(MainActivity.this, popularMoviesCovers));
         gridView.invalidateViews();
-        // TODO WHATTTTTTTTTTTTTTT?
     }
 
     @Override
@@ -95,15 +95,18 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     private void getFavorites() {
-        SharedPreferences sp = getSharedPreferences("favorites", MODE_PRIVATE);
-        for (String key : sp.getAll().keySet()) {
-            Movie movie = new Movie();
-            movie.setId(Integer.parseInt(key));
-            Log.e("Bradson", "Id: " + key);
-            movie.setPoster(sp.getString(key, "http://www.51allout.co.uk/2012-02-18-commonwealth-bank-odi-series-round-two-review/image-not-found/"));
-            favoriteMovies.add(movie);
-        }
-        setApadtor(favoriteMovies);
+//        SharedPreferences sp = getSharedPreferences("favorites", MODE_PRIVATE);
+
+        MovieDB db = new MovieDB(getApplicationContext(), null, null, 1);
+
+//        for (Movie movie : sp.getAll().keySet()) {
+//            Movie movie = new Movie();
+//            movie.setId(Integer.parseInt(key));
+//            movie.setPoster(sp.getString(key, "http://www.51allout.co.uk/2012-02-18-commonwealth-bank-odi-series-round-two-review/image-not-found/"));
+//            favoriteMovies.add(movie);
+//        }
+        movies = db.getMovies();
+        setApadtor();
     }
 
     @Override

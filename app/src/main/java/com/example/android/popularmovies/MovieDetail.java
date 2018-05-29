@@ -18,12 +18,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.popularmovies.adapter.ReviewAdapter;
 import com.example.android.popularmovies.adapter.TrailerAdapter;
 import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.model.Review;
 import com.example.android.popularmovies.model.Trailer;
+import com.example.android.popularmovies.persistence.MovieDB;
 import com.example.android.popularmovies.services.MovieService;
 import com.example.android.popularmovies.services.ReviewService;
 import com.example.android.popularmovies.services.TrailerService;
@@ -208,14 +210,34 @@ public class MovieDetail extends AppCompatActivity {
     }
 
     public void addToFavorites(View v) {
-        Log.e("Bradson", "Botton clicked");
-        movie.setFavorite(true);
+//        String id = String.valueOf(movie.getId());
+//        Log.e("Bradson", "Botton clicked");
+//        MovieDB db = new MovieDB(getApplicationContext(), null, null, 1);
+//        db.addMovie(movie);
+//        Log.e("Bradson", "Movie Id: " + (db.getMovie(id)).getTitle());
+//        db.deleteMovie(movie);
+//        Log.e("Bradson", "Movie aftwer deleted: " + db.getMovie(id));
 
-        SharedPreferences sp = getSharedPreferences("favorites", Context.MODE_PRIVATE);
-      SharedPreferences.Editor edit = sp.edit();
 
-        String key = String.valueOf(movie.getId());
-        edit.putString(key, movie.getPoster());
-        edit.commit();
+//        SharedPreferences sp = getSharedPreferences("favorites", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor edit = sp.edit();
+
+//        String key = String.valueOf(movie.getId());
+        MovieDB db = new MovieDB(getApplicationContext(), null, null, 1);
+        String id = String.valueOf(movie.getId());
+        movie.setFavorite(db.getMovie(id) != null);
+
+        if (!movie.isFavorite()) {
+
+//            edit.putString(key, movie.getPoster());
+            db.addMovie(movie);
+            Toast.makeText(this, "Added to favorites", Toast.LENGTH_SHORT).show();
+        } else {
+
+//            edit.remove(key);
+            db.deleteMovie(movie);
+            Toast.makeText(this, "Removed from favorites", Toast.LENGTH_SHORT).show();
+        }
+//        edit.commit();
     }
 }
