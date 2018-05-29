@@ -5,11 +5,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.preference.PreferenceActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +29,10 @@ import com.example.android.popularmovies.services.ReviewService;
 import com.example.android.popularmovies.services.TrailerService;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MovieDetail extends AppCompatActivity {
 
@@ -53,7 +58,7 @@ public class MovieDetail extends AppCompatActivity {
         Intent intent = getIntent();
 
 //        TODO: Implement Error message
-        if(intent.getExtras() == null) {
+        if (intent.getExtras() == null) {
             finish();
         }
 
@@ -69,7 +74,7 @@ public class MovieDetail extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             int resultCode = intent.getIntExtra("resultCode", Activity.RESULT_CANCELED);
 
-            if(resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 movie = (Movie) intent.getSerializableExtra("movie");
                 populateMovie();
             }
@@ -81,7 +86,7 @@ public class MovieDetail extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             int resultCode = intent.getIntExtra("resultCode", Activity.RESULT_CANCELED);
 
-            if(resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 trailers = (List<Trailer>) intent.getSerializableExtra("trailers");
                 populateTrailers();
             }
@@ -93,7 +98,7 @@ public class MovieDetail extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             int resultCode = intent.getIntExtra("resultCode", Activity.RESULT_CANCELED);
 
-            if(resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 reviews = (List<Review>) intent.getSerializableExtra("reviews");
                 populateReviews();
             }
@@ -139,11 +144,13 @@ public class MovieDetail extends AppCompatActivity {
         intent.putExtra("urlString", String.valueOf(id));
         startService(intent);
     }
+
     private void getTrailers(int id) {
         Intent intent = new Intent(this, TrailerService.class);
         intent.putExtra("urlString", String.valueOf(id));
         startService(intent);
     }
+
     private void getReviews(int id) {
         Intent intent = new Intent(this, ReviewService.class);
         intent.putExtra("id", id);
@@ -179,15 +186,36 @@ public class MovieDetail extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
-            intent.putExtra( PreferenceActivity.EXTRA_SHOW_FRAGMENT, SettingsActivity.GeneralPreferenceFragment.class.getName() );
-            intent.putExtra( PreferenceActivity.EXTRA_NO_HEADERS, true );
+            intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, SettingsActivity.GeneralPreferenceFragment.class.getName());
+            intent.putExtra(PreferenceActivity.EXTRA_NO_HEADERS, true);
             this.startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void finish() {
+        if (movie.isFavorite()) {
+            Intent data = new Intent();
+            setResult(RESULT_OK);
+            data.putExtra("response", (Serializable) movie);
+        } else {
+            Intent returnIntent = new Intent();
+            setResult(Activity.RESULT_CANCELED, returnIntent);
+        }
+        super.finish();
+    }
+
     public void addToFavorites(View v) {
-        movie.setFavorite(!movie.isFavorite());
+        Log.e("Bradson", "Botton clicked");
+        movie.setFavorite(true);
+
+        SharedPreferences sp = getSharedPreferences("favorites", Context.MODE_PRIVATE);
+      SharedPreferences.Editor edit = sp.edit();
+
+        String key = String.valueOf(movie.getId());
+        edit.putString(key, movie.getPoster());
+        edit.commit();
     }
 }

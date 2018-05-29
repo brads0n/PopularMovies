@@ -25,7 +25,7 @@ public class MovieService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
 
-        Movie movie = new Movie();
+        Movie movie;
         String id = intent.getStringExtra("urlString");
         URL url;
         // TODO Missing id

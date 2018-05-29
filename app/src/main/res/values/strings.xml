@@ -29,7 +29,7 @@
     <string-array name="sort_movies_list_values">
         <item>/movie/popular</item>
         <item>/movie/top_rated</item>
-        <item></item>
+        <item>favorites</item>
     </string-array>
 
     <!-- Example settings for Data & Sync -->

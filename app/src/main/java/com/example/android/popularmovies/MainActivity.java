@@ -27,61 +27,83 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     GridView gridView;
-    List<Movie> popularMovies;
-    String sortBy;
+    List<Movie> movies;
+    List<Movie> favoriteMovies;
 
     BroadcastReceiver myReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.e("Bradson", "Received");
             int resultCode = intent.getIntExtra("resultCode", Activity.RESULT_CANCELED);
             if(resultCode == RESULT_OK) {
-                popularMovies = (List<Movie>) intent.getSerializableExtra("movies");
+                movies = (List<Movie>) intent.getSerializableExtra("movies");
 
-                List<String> popularMoviesCovers = new ArrayList<>();
-                for (Movie movie : popularMovies
-                        ) {
-                    popularMoviesCovers.add(movie.getPoster());
-                }
-                gridView.setAdapter(new ImageAdapter(MainActivity.this, popularMoviesCovers));
-                gridView.invalidateViews();
+                setApadtor(movies);
             }
         }
     };
 
+    public void setApadtor(List<Movie> movies) {
+        List<String> popularMoviesCovers = new ArrayList<>();
+        for (Movie movie : movies
+                ) {
+            popularMoviesCovers.add(movie.getPoster());
+        }
+        gridView.setAdapter(new ImageAdapter(MainActivity.this, popularMoviesCovers));
+        gridView.invalidateViews();
+        // TODO WHATTTTTTTTTTTTTTT?
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        favoriteMovies = new ArrayList<>();
+
         setContentView(R.layout.activity_main);
 
         gridView = findViewById(R.id.gridView);
 
-        sortBy =
-                PreferenceManager.getDefaultSharedPreferences( this )
-                        .getString(getString(R.string.sort_movies_by), "Nothing");
-
-//        String sortBy = getPreferences(MODE_PRIVATE).getString(getString(R.string.sort_movies_by), "/movie/popular");
-
-//        getMovies("/movie/popular");
-//        getMovies("/movie/top_rated");
-        getMovies(sortBy);
+        getMovies();
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 Intent i = new Intent(getApplicationContext(), MovieDetail.class);
-                // TODO qet query based on possition
-                i.putExtra("id", popularMovies.get(position).getId());
+                i.putExtra("id", movies.get(position).getId());
                 startActivity(i);
             }
         });
     }
 
-    private void getMovies(String query) {
+    private void getTMDBMovies(String query) {
         Intent intent = new Intent(this, GetMoviesService.class);
         intent.putExtra("urlString", query);
         startService(intent);
+    }
+
+    private void getMovies() {
+        String sortBy = PreferenceManager.getDefaultSharedPreferences( this )
+                        .getString(getString(R.string.sort_movies_by), "Nothing");
+        switch (sortBy) {
+            case "favorites" :
+                getFavorites();
+                break;
+             default:
+                 getTMDBMovies(sortBy);
+        }
+    }
+
+    private void getFavorites() {
+        SharedPreferences sp = getSharedPreferences("favorites", MODE_PRIVATE);
+        for (String key : sp.getAll().keySet()) {
+            Movie movie = new Movie();
+            movie.setId(Integer.parseInt(key));
+            Log.e("Bradson", "Id: " + key);
+            movie.setPoster(sp.getString(key, "http://www.51allout.co.uk/2012-02-18-commonwealth-bank-odi-series-round-two-review/image-not-found/"));
+            favoriteMovies.add(movie);
+        }
+        setApadtor(favoriteMovies);
     }
 
     @Override
@@ -120,12 +142,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if(key.equals(getString(R.string.sort_movies_by))) {
-            Log.e("Bradson", "Preferences changed");
-            sortBy =
-                    PreferenceManager.getDefaultSharedPreferences( this )
-                            .getString(getString(R.string.sort_movies_by), "Nothing");
-//            gridView.setAdapter(null);
-            getMovies(sortBy);
+            getMovies();
         }
     }
 
