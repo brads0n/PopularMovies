@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -30,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
             popularMovies = (List<Movie>) intent.getSerializableExtra("movies");
 
             List<String> popularMoviesCovers = new ArrayList<>();
-            for (Movie movie: popularMovies
-                 ) {
+            for (Movie movie : popularMovies
+                    ) {
                 popularMoviesCovers.add(movie.getPoster());
             }
             gridView.setAdapter(new ImageAdapter(MainActivity.this, popularMoviesCovers));
@@ -77,5 +79,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         unregisterReceiver(myReceiver);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            MainActivity.this.startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -9,7 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -130,11 +131,6 @@ public class MovieDetail extends AppCompatActivity {
         rvReviews.setLayoutManager(llm);
         ReviewAdapter adapter = new ReviewAdapter(this, reviews);
         rvReviews.setAdapter(adapter);
-
-        for (Review review: reviews
-             ) {
-            Log.e("Bradson", "Review: " + review.getAuthor() + " :" + review.getContent());
-        }
     }
 
     private void getMovie(int id) {
@@ -170,6 +166,22 @@ public class MovieDetail extends AppCompatActivity {
         unregisterReceiver(movieReceiver);
         unregisterReceiver(trailersReceiver);
         unregisterReceiver(reviewsReceiver);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void addToFavorites(View v) {

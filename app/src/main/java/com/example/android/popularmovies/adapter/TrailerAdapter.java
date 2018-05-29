@@ -56,9 +56,6 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.ViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "Gonna open Youtube for " + trailers.get(position).getUrl(), Toast.LENGTH_SHORT).show();
-                Log.e("Bradson", "Gonna open Youtube");
-
                 Intent intent = null;
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse(trailers.get(position).getUrl().toString()));
                     mContext.startActivity(intent);
