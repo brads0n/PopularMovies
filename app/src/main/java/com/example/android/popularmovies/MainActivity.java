@@ -5,8 +5,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,23 +24,28 @@ import com.example.android.popularmovies.services.GetMoviesService;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     GridView gridView;
     List<Movie> popularMovies;
+    String sortBy;
 
     BroadcastReceiver myReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.e("Bradson", "Received");
             int resultCode = intent.getIntExtra("resultCode", Activity.RESULT_CANCELED);
-            popularMovies = (List<Movie>) intent.getSerializableExtra("movies");
+            if(resultCode == RESULT_OK) {
+                popularMovies = (List<Movie>) intent.getSerializableExtra("movies");
 
-            List<String> popularMoviesCovers = new ArrayList<>();
-            for (Movie movie : popularMovies
-                    ) {
-                popularMoviesCovers.add(movie.getPoster());
+                List<String> popularMoviesCovers = new ArrayList<>();
+                for (Movie movie : popularMovies
+                        ) {
+                    popularMoviesCovers.add(movie.getPoster());
+                }
+                gridView.setAdapter(new ImageAdapter(MainActivity.this, popularMoviesCovers));
+                gridView.invalidateViews();
             }
-            gridView.setAdapter(new ImageAdapter(MainActivity.this, popularMoviesCovers));
         }
     };
 
@@ -47,8 +56,15 @@ public class MainActivity extends AppCompatActivity {
 
         gridView = findViewById(R.id.gridView);
 
+        sortBy =
+                PreferenceManager.getDefaultSharedPreferences( this )
+                        .getString("Sort movies by", "Nothing");
+
+//        String sortBy = getPreferences(MODE_PRIVATE).getString(getString(R.string.sort_movies_by), "/movie/popular");
+
 //        getMovies("/movie/popular");
-        getMovies("/movie/top_rated");
+//        getMovies("/movie/top_rated");
+        getMovies(sortBy);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -78,12 +94,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(myReceiver);
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .registerOnSharedPreferenceChangeListener(this);
         return true;
     }
 
@@ -91,9 +109,31 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
+            intent.putExtra( PreferenceActivity.EXTRA_SHOW_FRAGMENT, SettingsActivity.GeneralPreferenceFragment.class.getName() );
+            intent.putExtra( PreferenceActivity.EXTRA_NO_HEADERS, true );
             MainActivity.this.startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if(key.equals("Sort movies by")) {
+            Log.e("Bradson", "Preferences changed");
+            sortBy =
+                    PreferenceManager.getDefaultSharedPreferences( this )
+                            .getString("Sort movies by", "Nothing");
+//            gridView.setAdapter(null);
+            getMovies(sortBy);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
+        unregisterReceiver(myReceiver);
+        super.onDestroy();
     }
 }
