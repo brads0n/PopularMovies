@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         sortBy =
                 PreferenceManager.getDefaultSharedPreferences( this )
-                        .getString("Sort movies by", "Nothing");
+                        .getString(getString(R.string.sort_movies_by), "Nothing");
 
 //        String sortBy = getPreferences(MODE_PRIVATE).getString(getString(R.string.sort_movies_by), "/movie/popular");
 
@@ -119,11 +119,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if(key.equals("Sort movies by")) {
+        if(key.equals(getString(R.string.sort_movies_by))) {
             Log.e("Bradson", "Preferences changed");
             sortBy =
                     PreferenceManager.getDefaultSharedPreferences( this )
-                            .getString("Sort movies by", "Nothing");
+                            .getString(getString(R.string.sort_movies_by), "Nothing");
 //            gridView.setAdapter(null);
             getMovies(sortBy);
         }
